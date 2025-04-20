@@ -52,4 +52,18 @@ Here is a pre-start checklist:
 
 ## Implementation
 
-** ADD YOUR IMPLEMENTATION DOCUMENTATION HERE **
+### How to test the application ?
+
+Assuming that [docker](https://docs.docker.com/get-started/get-docker/) is installed the only thing needed to test this application is :
+
+```sh
+docker compose up
+```
+
+Running this project without docker is also possible with the provided [taskfile](https://taskfile.dev/) by calling it with `task`.
+Doing so will execute the default task that run `install` then `run` which will install the dependencies required by HiveBox as well as running it.
+After installation the project can be run using `task run`.
+
+It's possible to uninstall HiveBox by calling `task uninstall`.
+It will not remove the HiveBox dependencies by design since it assume that `task uninstall` would most likely be used if `task install` was run outside of a virtual environment.
+Only removing HiveBox reduce the possible side effect that `task uninstall` might have on your other projects.
