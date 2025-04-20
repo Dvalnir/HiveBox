@@ -15,3 +15,6 @@ tasks:
   run:
     cmds:
       - python main.py
+  precommit:
+    cmds:
+      - pre-commit run --all-files

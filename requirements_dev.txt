@@ -1,0 +1,4 @@
+commitizen
+pre-commit
+pylint[spelling]~=3.3.6
+ruff

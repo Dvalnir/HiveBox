@@ -1,5 +1,6 @@
 ARG PYTHON_IMAGE="python:3.10-alpine"
 
+# hadolint ignore=DL3006
 FROM ${PYTHON_IMAGE} AS builder
 WORKDIR /HiveBox
 COPY requirements.txt .
@@ -8,6 +9,7 @@ COPY src src/
 COPY pyproject.toml .
 RUN python -m build
 
+# hadolint ignore=DL3006
 FROM ${PYTHON_IMAGE}
 WORKDIR /HiveBox
 COPY --from=builder /HiveBox/dist/hivebox-*-py3-none-any.whl dist/hivebox-*-py3-none-any.whl
