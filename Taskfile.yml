@@ -1,0 +1,17 @@
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task: install
+      - task: run
+  install:
+    cmds:
+      - pip install -r requirements.txt
+      - pip install .
+  uninstall:
+    cmds:
+      - pip install HiveBox
+  run:
+    cmds:
+      - python main.py
