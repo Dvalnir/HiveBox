@@ -28,6 +28,7 @@ repos:
     rev: v4.6.0 # automatically updated by Commitizen
     hooks:
       - id: commitizen
+        stages: [commit-msg]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.11.6

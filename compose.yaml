@@ -1,3 +1,23 @@
 services:
   hivebox:
     build: .
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hivebox.rule=Host(`hivebox.localhost`)"
+      - "traefik.http.routers.hivebox.entrypoints=web"
+  traefik:
+    image: "traefik:v3.3"
+    container_name: "traefik"
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.web.address=:80"
+      # - "--entrypoints.websecure.address=:443"
+    ports:
+      - "80:80" # HTTP
+      # - "443:443" # HTTPS
+      - "8080:8080" # TRAEFIK
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"

@@ -1,4 +1,5 @@
 commitizen
+fastapi[standard]~=0.115.12
 pre-commit
 pylint[spelling]~=3.3.6
 ruff

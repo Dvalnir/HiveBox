@@ -5,16 +5,23 @@ tasks:
     cmds:
       - task: install
       - task: run
+  dev:
+    cmds:
+      - task: install_dev
+      - task: install
+      - task: run_dev
   install:
     cmds:
       - pip install -r requirements.txt
-      - pip install .
-  uninstall:
+  install_dev:
     cmds:
-      - pip install HiveBox
+      - pip install -r requirements_dev.txt
   run:
     cmds:
-      - python main.py
+      - fastapi dev ./src/HiveBox/main.py
+  run_dev:
+    cmds:
+      - fastapi dev ./src/HiveBox/main.py --reload
   precommit:
     cmds:
       - pre-commit run --all-files
