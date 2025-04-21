@@ -25,3 +25,6 @@ tasks:
   precommit:
     cmds:
       - pre-commit run --all-files
+  compose:
+    cmds:
+      - docker compose up -d --build --remove-orphans
