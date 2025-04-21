@@ -4,6 +4,7 @@ from fastapi import APIRouter
 
 router = APIRouter()
 
+
 @router.get("/version")
 async def version():
     """Returns the version of the HiveBox app."""

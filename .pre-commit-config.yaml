@@ -34,7 +34,7 @@ repos:
     rev: v0.11.6
     hooks:
       - id: ruff
-      # - id: ruff-format
+      - id: ruff-format
 
   - repo: https://github.com/hadolint/hadolint
     rev: v2.12.0
