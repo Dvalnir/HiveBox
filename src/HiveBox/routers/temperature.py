@@ -1,5 +1,7 @@
+from statistics import fmean
 import requests
 from fastapi import APIRouter
+from datetime import datetime, timedelta, timezone
 
 router = APIRouter()
 
@@ -17,15 +19,22 @@ async def get_average_temp():
         "5c21ff8f919bf8001adf2488",
         "5ade1acf223bd80019a1011c",
     ]
-    average_temperature = 0
+    measurement_last_acceptable_time = datetime.now(timezone.utc) - timedelta(hours=1)
+    # 2025-04-21T12:55:17.511Z where Z is Zulu time => UTC+0
+    opensense_time_format = "%Y-%m-%dT%H:%M:%S.%f%z"
+    temperature_list = []
     for sensebox_ID in sensebox_ID_list:
         api_url = f"https://api.opensensemap.org/boxes/{sensebox_ID}"
         result = requests.get(url=api_url, timeout=0.3)
         if result.status_code == 200:
             for sensor in result.json()["sensors"]:
                 if sensor["title"] == "Temperatur":
-                    average_temperature += float(sensor["lastMeasurement"]["value"])
+                    last_measurement = sensor["lastMeasurement"]
+                    measurement_time = datetime.strptime(
+                        last_measurement["createdAt"], opensense_time_format
+                    )
+                    if measurement_time >= measurement_last_acceptable_time:
+                        temperature_list.append(float(last_measurement["value"]))
         else:
             print(f"{api_url} resulted in status code {result.status_code}")
-    average_temperature /= len(sensebox_ID_list)
-    return average_temperature
+    return fmean(temperature_list)
