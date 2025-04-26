@@ -1,4 +1,4 @@
-FROM python:3-alpine
+FROM python:3.13-alpine
 RUN addgroup hivebox && adduser -G hivebox -D hivebox
 USER hivebox
 WORKDIR /home/hivebox
