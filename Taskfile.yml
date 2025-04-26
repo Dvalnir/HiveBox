@@ -10,6 +10,7 @@ tasks:
       - task: install_dev
       - task: install
       - task: test
+      - task: lint
       - task: run_dev
   install_dev:
     cmds:
@@ -20,6 +21,12 @@ tasks:
   test:
     cmds:
       - python -m pytest
+  lint:
+    cmds:
+      - hadolint Dockerfile
+      - python -m pylint src/HiveBox
+      - python -m ruff check
+      - python -m ruff format
   run:
     cmds:
       - python -m fastapi run ./src/HiveBox/main.py
@@ -28,7 +35,7 @@ tasks:
       - python -m fastapi dev ./src/HiveBox/main.py
   precommit:
     cmds:
-      - pre-commit run --all-files
+      - python -m pre_commit run --all-files
   compose:
     cmds:
       - docker compose up -d --build --remove-orphans
