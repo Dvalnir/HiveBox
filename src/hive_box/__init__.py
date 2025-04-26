@@ -1,5 +1,5 @@
 """
-__init__.py for the HiveBox package.
+__init__.py for the hive_box package.
 """
 
 from .__version__ import VERSION

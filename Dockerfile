@@ -8,4 +8,4 @@ COPY --chown=hivebox:hivebox src src/
 EXPOSE 80/tcp
 EXPOSE 80/udp
 ENTRYPOINT ["python", "-m", "fastapi"]
-CMD ["run", "./src/HiveBox/main.py", "--port", "80", "--proxy-headers"]
+CMD ["run", "./src/hive_box/main.py", "--port", "80", "--proxy-headers"]

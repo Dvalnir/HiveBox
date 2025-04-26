@@ -1,5 +1,5 @@
 """
-Test module for the HiveBox application.
+Test module for the hive_box application.
 """
 
 import re

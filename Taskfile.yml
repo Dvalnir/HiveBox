@@ -24,15 +24,15 @@ tasks:
   lint:
     cmds:
       - hadolint Dockerfile
-      - python -m pylint src/HiveBox
+      - python -m pylint src/hive_box
       - python -m ruff check
       - python -m ruff format
   run:
     cmds:
-      - python -m fastapi run ./src/HiveBox/main.py
+      - python -m fastapi run ./src/hive_box/main.py
   run_dev:
     cmds:
-      - python -m fastapi dev ./src/HiveBox/main.py
+      - python -m fastapi dev ./src/hive_box/main.py
   precommit:
     cmds:
       - python -m pre_commit run --all-files
