@@ -1,3 +1,7 @@
-from .__version__ import version
+"""
+__init__.py for the HiveBox package.
+"""
 
-__version__ = version
+from .__version__ import VERSION
+
+__version__ = VERSION

@@ -1,6 +1,9 @@
-from HiveBox import __version__
+"""
+Version endpoint module.
+"""
 
 from fastapi import APIRouter
+from HiveBox import __version__
 
 router = APIRouter()
 
