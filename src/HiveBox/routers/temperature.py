@@ -1,5 +1,6 @@
+import asyncio
 from statistics import fmean
-import requests
+import aiohttp
 from fastapi import APIRouter
 from datetime import datetime, timedelta, timezone
 
@@ -19,35 +20,65 @@ async def get_average_temp() -> float:
         "5c21ff8f919bf8001adf2488",
         "5ade1acf223bd80019a1011c",
     ]
-    measurement_last_acceptable_time = datetime.now(timezone.utc) - timedelta(hours=1)
+
+    sensebox_list_data = await retrieve_sensebox_list_data(sensebox_ID_list)
+
+    # Create a temperature_list
     temperature_list = []
-    for sensebox_ID in sensebox_ID_list:
-        api_url = f"https://api.opensensemap.org/boxes/{sensebox_ID}"
-        temp = get_box_temp_if_eligible(measurement_last_acceptable_time, api_url)
+    measurement_last_acceptable_time = datetime.now(timezone.utc) - timedelta(hours=1)
+    for response in sensebox_list_data:
+        temp = extract_box_temp(measurement_last_acceptable_time, response)
         if temp is not None:
             temperature_list.append(temp)
+
+    # Return the average or 0K if list is empty
     if len(temperature_list) == 0:
         return -273.15
     else:
         return fmean(temperature_list)
 
 
-def get_box_temp_if_eligible(measurement_last_acceptable_time, api_url) -> float | None:
+async def retrieve_sensebox_list_data(sensebox_ID_list: list[str]):
+    request_timeout = aiohttp.ClientTimeout(total=10)
+    json_list: list[dict] = []
+    async with aiohttp.ClientSession(timeout=request_timeout) as session:
+        session_list: list[aiohttp.ClientSession] = []
+        for sensebox_ID in sensebox_ID_list:
+            api_url = f"https://api.opensensemap.org/boxes/{sensebox_ID}"
+            session_list.append(session.get(api_url))
+        session_list = await asyncio.gather(*session_list)
+        for session in session_list:
+            if session.status == 200:
+                json_list.append(session.json())
+            else:
+                print(f"{session._base_url} resulted in status code {session.status}")
+        json_list = await asyncio.gather(*json_list)
+    return json_list
+
+
+def extract_box_temp(
+    measurement_last_acceptable_time: datetime, extracted_response: dict
+):
     """Retrieve a senseBox temperature."""
-    box_temperature = None
+    last_measurement = extract_last_measurement(extracted_response)
+    return filter_on_time(measurement_last_acceptable_time, last_measurement)
+
+
+def extract_last_measurement(extracted_response: dict) -> dict:
+    for sensor in extracted_response["sensors"]:
+        if sensor["title"] == "Temperatur":
+            return sensor["lastMeasurement"]
+
+
+def filter_on_time(
+    measurement_last_acceptable_time: datetime, last_measurement: dict
+) -> float | None:
     # 2025-04-21T12:55:17.511Z where Z is Zulu time => UTC+0
     opensense_time_format = "%Y-%m-%dT%H:%M:%S.%f%z"
-    request_timeout = 0.3
-    result = requests.get(url=api_url, timeout=request_timeout)
-    if result.status_code == 200:
-        for sensor in result.json()["sensors"]:
-            if sensor["title"] == "Temperatur":
-                last_measurement = sensor["lastMeasurement"]
-                measurement_time = datetime.strptime(
-                    last_measurement["createdAt"], opensense_time_format
-                )
-                if measurement_time >= measurement_last_acceptable_time:
-                    box_temperature = float(last_measurement["value"])
+    measurement_time = datetime.strptime(
+        last_measurement["createdAt"], opensense_time_format
+    )
+    if measurement_time >= measurement_last_acceptable_time:
+        return float(last_measurement["value"])
     else:
-        print(f"{api_url} resulted in status code {result.status_code}")
-    return box_temperature
+        return None

@@ -18,10 +18,10 @@ tasks:
       - pip install -r requirements_dev.txt
   run:
     cmds:
-      - fastapi dev ./src/HiveBox/main.py
+      - python -m fastapi run ./src/HiveBox/main.py
   run_dev:
     cmds:
-      - fastapi dev ./src/HiveBox/main.py --reload
+      - python -m fastapi dev ./src/HiveBox/main.py
   precommit:
     cmds:
       - pre-commit run --all-files
