@@ -12,7 +12,7 @@ async def temperature():
     return {"message": f"{await get_average_temp()}"}
 
 
-async def get_average_temp():
+async def get_average_temp() -> float:
     """Retrieve current senseBox temperatures and calculate average temperature."""
     sensebox_ID_list = [
         "5eba5fbad46fb8001b799786",
