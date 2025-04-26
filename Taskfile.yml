@@ -9,6 +9,7 @@ tasks:
     cmds:
       - task: install_dev
       - task: install
+      - task: test
       - task: run_dev
   install_dev:
     cmds:
@@ -16,6 +17,9 @@ tasks:
   install:
     cmds:
       - pip install -r requirements.txt
+  test:
+    cmds:
+      - python -m pytest
   run:
     cmds:
       - python -m fastapi run ./src/HiveBox/main.py

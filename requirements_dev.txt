@@ -1,5 +1,7 @@
 commitizen
 fastapi[standard]~=0.115.12
+httpx~=0.28.1
 pre-commit
 pylint[spelling]~=3.3.6
+pytest~=8.3.5
 ruff
