@@ -37,4 +37,7 @@ async def get_average_temp():
                         temperature_list.append(float(last_measurement["value"]))
         else:
             print(f"{api_url} resulted in status code {result.status_code}")
-    return fmean(temperature_list)
+    if len(temperature_list) == 0:
+        return -273.15
+    else:
+        return fmean(temperature_list)
