@@ -3,15 +3,32 @@ version: '3'
 tasks:
   default:
     cmds:
-      - task: install
+      - task: sync
       - task: run
-  install:
+  dev:
     cmds:
-      - pip install -r requirements.txt
-      - pip install .
-  uninstall:
+      - task: sync
+      - task: test
+      - task: lint
+      - task: run_dev
+  sync:
     cmds:
-      - pip install HiveBox
+      - uv sync
+  test:
+    cmds:
+      - uv run pytest
+  lint:
+    cmds:
+      - hadolint Dockerfile
+      - uv run pylint src/hive_box
+      - uv run ruff check
+      - uv run ruff format
   run:
     cmds:
-      - python main.py
+      - uv run fastapi dev ./src/hive_box/main.py
+  precommit:
+    cmds:
+      - uv run pre-commit run --all-files
+  compose:
+    cmds:
+      - docker compose up -d --build --remove-orphans

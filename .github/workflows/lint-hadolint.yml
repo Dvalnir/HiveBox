@@ -1,0 +1,12 @@
+name: Hadolint
+
+on: [push]
+
+jobs:
+  lint_hadolint:
+    runs-on: ubuntu-24.04@sha256:f8b860e4f9036f2694571770da292642eebcc4c2ea0c70a1a9244c2a1d436cd9
+    steps:
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+    - uses: hadolint/hadolint-action@54c9adbab1582c2ef04b2016b760714a4bfde3cf
+      with:
+        dockerfile: Dockerfile
