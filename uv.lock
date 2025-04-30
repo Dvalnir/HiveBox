@@ -510,7 +510,7 @@ wheels = [
 
 [[package]]
 name = "hive-box"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },
     { name = "fastapi", extra = ["standard"] },
