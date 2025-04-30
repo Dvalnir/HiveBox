@@ -6,10 +6,17 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:  # added using https://github.com/step-security/secure-repo
+  contents: read
+
 jobs:
   docker_build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04@sha256:f8b860e4f9036f2694571770da292642eebcc4c2ea0c70a1a9244c2a1d436cd9
     steps:
-    - uses: actions/checkout@v4
+    - name: Harden the runner (Audit all outbound calls)
+      uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0 # v2.12.0
+      with:
+        egress-policy: audit
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
     - name: Build the Docker image
       run: docker buildx build . --tag hivebox:$(date +%s)
