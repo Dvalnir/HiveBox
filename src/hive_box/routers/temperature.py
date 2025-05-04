@@ -14,7 +14,8 @@ router = APIRouter()
 @router.get("/temperature")
 async def temperature():
     """Return current average temperature based on all senseBox data."""
-    return {"message": f"{await get_average_temp()}"}
+    average_temp = await get_average_temp()
+    return {"message": f"{average_temp}", "status": f"{get_status(average_temp)}"}
 
 
 async def get_average_temp() -> float:
@@ -139,3 +140,29 @@ def filter_on_time(
     if measurement_time >= measurement_last_acceptable_time:
         return float(last_measurement["value"])
     return None
+
+
+def get_status(average_temp: float) -> str:
+    """
+    Returns a temperature status message based on the average temperature.
+
+    args:
+        average_temp : float
+            The average temperature value to evaluate.
+
+    Returns:
+        str
+            A message indicating the temperature status:
+            - "Too Cold" if the temperature is less than 10
+            - "Good" if the temperature is between 11 and 36 (inclusive)
+            - "Too Hot" if the temperature is greater than 37
+
+    Raises:
+        ValueError
+            If the temperature value is not supported.
+    """
+    if average_temp < 11:
+        return "Too Cold"
+    if average_temp > 36:
+        return "Too Hot"
+    return "Good"

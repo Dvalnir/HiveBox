@@ -6,6 +6,7 @@ import re
 from fastapi.testclient import TestClient
 import pytest
 from .main import app
+from .routers import temperature
 
 client = TestClient(app)
 
@@ -77,3 +78,27 @@ def can_be_float(input_string):
         return True
     except ValueError:
         return False
+
+
+@pytest.mark.parametrize(
+    "input_temp, expected_output",
+    [
+        (0, "Too Cold"),
+        (10.9, "Too Cold"),
+        (11, "Good"),
+        (25, "Good"),
+        (36, "Good"),
+        (36.1, "Too Hot"),
+        (50, "Too Hot"),
+    ],
+)
+def test_get_status_valid_cases(input_temp, expected_output):
+    """
+    Tests the get_status function with a range of valid temperature inputs.
+
+    Ensures that the correct status string is returned for:
+    - Temperatures below 11 ("Too Cold")
+    - Temperatures from 11 to 36 inclusive ("Good")
+    - Temperatures above 36 ("Too Hot")
+    """
+    assert temperature.get_status(input_temp) == expected_output
