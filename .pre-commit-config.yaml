@@ -48,3 +48,4 @@ repos:
     rev: v2.17.2
     hooks:
       - id: pylint
+        args: [--disable=import-error]
