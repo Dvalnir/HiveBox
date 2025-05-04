@@ -2,6 +2,9 @@ name: Hadolint
 
 on: [push]
 
+permissions:
+  contents: read
+
 jobs:
   lint_hadolint:
     runs-on: ubuntu-24.04
