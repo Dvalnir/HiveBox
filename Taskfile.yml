@@ -3,8 +3,7 @@ version: '3'
 tasks:
   default:
     cmds:
-      - task: sync
-      - task: run
+      - task --list-all
   dev:
     cmds:
       - task: sync
@@ -13,6 +12,7 @@ tasks:
       - task: run_dev
   sync:
     cmds:
+      - uv python install python3.13
       - uv sync
   test:
     cmds:
