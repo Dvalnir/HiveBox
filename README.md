@@ -67,3 +67,8 @@ After installation the project can be run using `task run`.
 It's possible to uninstall HiveBox by calling `task uninstall`.
 It will not remove the HiveBox dependencies by design since it assume that `task uninstall` would most likely be used if `task install` was run outside of a virtual environment.
 Only removing HiveBox reduce the possible side effect that `task uninstall` might have on your other projects.
+
+### Quick documentation links
+
+- https://fastapi.tiangolo.com/
+- https://prometheus.github.io/client_python/
