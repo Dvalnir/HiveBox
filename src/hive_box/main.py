@@ -3,8 +3,8 @@ Main module which also define the root endpoint.
 """
 
 from fastapi import FastAPI
-from .routers import version, temperature
 from prometheus_client import make_asgi_app
+from .routers import version, temperature
 
 app = FastAPI()
 
