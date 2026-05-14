@@ -10,6 +10,7 @@ dynamic = ["version"]
 dependencies = [
     "aiohttp>=3.11.18",
     "fastapi[standard]>=0.115.12",
+    "prometheus-client>=0.25.0",
 ]
 
 [build-system]
